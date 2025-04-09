@@ -23,10 +23,10 @@ Trust relationship.
 ```
 Permissions:
 Attach below AWS managed permissions to your karppenter IAM role.
-AmazonEKSWorkerNodePolicy
-AmazonEC2ContainerRegistryPullOnly 
-AmazonEKS_CNI_Policy
-AmazonSSMManagedInstanceCore
+- AmazonEKSWorkerNodePolicy
+- AmazonEC2ContainerRegistryPullOnly 
+- AmazonEKS_CNI_Policy
+- AmazonSSMManagedInstanceCore
 
 3. Create a karpenter controller IAM role with below trust relationship and json policy.
 
