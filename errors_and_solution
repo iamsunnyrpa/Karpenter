@@ -30,7 +30,8 @@ Verify cluster connectivity and health using kubectl get nodes and kubectl clust
 Ensure the EKS cluster possesses adequate resources (kubectl describe nodes | grep -A 5 "Allocated resources").   
 Check for pods stuck in a pending state across all namespaces (kubectl get pods --all-namespaces | grep Pending).   
 Review events within the kube-system namespace for potential indicators (kubectl get events -n kube-system).   
-Examine Helm history for previous failed installation attempts (helm history karpenter -n kube-system).   
+Examine Helm history for previous failed installation attempts (helm history karpenter -n kube-system).  
+
 3. Resource Already Exists Error (PodDisruptionBudget Conflict)
 
 Error: Error: rendered manifests contain a resource that already exists. Unable to continue with install: PodDisruptionBudget "karpenter" in namespace "kube-system" exists... invalid ownership metadata... annotation validation error: key "meta.helm.sh/release-name" must equal "karpenter-release": current value is "karpenter"    
@@ -38,7 +39,8 @@ Description: This error signifies a naming conflict. A PodDisruptionBudget (PDB)
 Resolution:
 Identify the existing Karpenter installation using Helm commands (e.g., helm list -n kube-system).   
 If the previous installation is obsolete, uninstall it completely: helm uninstall karpenter -n kube-system.   
-Manually delete the conflicting PDB resource: kubectl delete pdb karpenter -n kube-system.   
+Manually delete the conflicting PDB resource: kubectl delete pdb karpenter -n kube-system. 
+
 4. AWS STS AssumeRoleWithWebIdentity Error / SQS NonExistentQueue Error
 
 Error Log Snippets:
@@ -64,12 +66,14 @@ helm install karpenter oci://public.ecr.aws/karpenter/karpenter --version 1.3.3 
 Error: The EC2NodeClass "default" is invalid: spec.amiSelectorTerms[0].alias: Invalid value: "string": 'alias' is improperly formatted, must match the format 'family@version'    
 Controller Log: {"level":"ERROR",..."message":"Reconciler error",..."error":"getting amis, getting AMI queries, failed to discover AMIs for alias \"al2023@1.0.0\""}
 Description: This validation error occurs when the amiSelectorTerms within an EC2NodeClass specification contains improperly formatted values. The alias field requires a specific format, typically family@version (e.g., al2023@latest).   
-Resolution: Correct the value provided in the amiSelectorTerms.alias field within the EC2NodeClass definition to match the required family@version format. Example: al2023@latest.   
+Resolution: Correct the value provided in the amiSelectorTerms.alias field within the EC2NodeClass definition to match the required family@version format. Example: al2023@latest. 
+
 6. Subnet Discovery Error (Missing Tag)
 
 Controller Log: {"level":"ERROR",..."message":"failed listing instance types for default",..."error":"no subnets found"}    
 Description: This error indicates that Karpenter could not identify suitable subnets for node provisioning. This typically happens when the required discovery tag (karpenter.sh/discovery: <cluster-name>) is missing from the subnet resources in AWS.   
 Resolution: Ensure that the subnets intended for use by Karpenter are tagged correctly in AWS with the key karpenter.sh/discovery and the value set to your cluster's name (e.g., my-cluster).   
+
 7. NodePool Not Ready Error
 
 Controller Log: {"level":"ERROR",..."message":"ignoring nodepool, not ready",..."NodePool":{"name":"default"}}    
