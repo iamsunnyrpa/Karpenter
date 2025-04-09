@@ -21,7 +21,8 @@ Trust relationship.
   ]
 }
 ```
-Permissions:
+**Permissions:**
+
 Attach below AWS managed permissions to your karppenter IAM role.
 - AmazonEKSWorkerNodePolicy
 - AmazonEC2ContainerRegistryPullOnly 
